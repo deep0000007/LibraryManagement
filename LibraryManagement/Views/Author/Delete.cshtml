@@ -1,0 +1,94 @@
+﻿@model LibraryManagement.Models.Author
+
+@{
+    ViewBag.Title = "Delete Author";
+}
+
+<h2 class="text-danger text-center">Delete Author</h2>
+
+<h3 class="text-center text-warning">Are you sure you want to delete this author?</h3>
+
+<div class="container mt-4 p-4 shadow-lg rounded bg-light">
+    <h4 class="mb-4 text-primary">Author Details</h4>
+    <hr />
+
+    <dl class="row">
+        <!-- Name -->
+        <dt class="col-sm-2 text-right">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <!-- Address -->
+        <dt class="col-sm-2 text-right">
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <!-- Phone -->
+        <dt class="col-sm-2 text-right">
+            @Html.DisplayNameFor(model => model.phone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.phone)
+        </dd>
+    </dl>
+
+    <!-- Delete Form -->
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group text-center">
+            <input type="submit" value="Delete" class="btn btn-danger btn-lg mr-2" />
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary btn-lg" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<!-- Custom CSS Styling -->
+<style>
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        margin-bottom: 30px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .rounded {
+        border-radius: 0.5rem;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+    .row {
+        margin-bottom: 20px;
+    }
+</style>
+

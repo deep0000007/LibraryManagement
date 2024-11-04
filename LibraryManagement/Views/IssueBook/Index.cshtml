@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <div class="col-sm-5">
+        @using (Html.BeginForm("save", "IssueBook", FormMethod.Post))
+        {
+            <div>
+                <h3>Issue book</h3>
+            </div>
+
+            <div class="form-group">
+                <label> Member Id</label>
+                <input type="text" id="member_id" @*value="member_id"*@ class="form-control" placeholder="Member" reguired />
+            </div>
+            <div class="form-group">
+                <label> Name</label>
+                <input type="text" id="mname" @*value="mname"*@ class="form-control" placeholder="Name" reguired />
+            </div>
+            <div class="form-group">
+                <label> Book Name</label>
+                <select class="form-control" id="book_id" name="book">
+                    <option>Please Select</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label> Issue Date</label>
+                <input type="date" id="issuedate" @*value="issuedate"*@ class="form-control" placeholder="Issue date" reguired />
+            </div>
+            <div class="form-group">
+                <label> Return date</label>
+                <input type="date" id="returndate" @*value="returndate"*@ class="form-control" placeholder="Return date" reguired />
+            </div>
+
+            <div class="form-group">
+
+                <input type="submit" value="save" class="btn btn-success" reguired />
+            </div>
+
+
+
+
+        }
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Scripts/jquery-3.7.0.js"></script>
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+
+    <script>
+        // Call this function to get member name based on the member ID
+        function getMid() {
+            $("#member_id").keyup(function () {
+                var memberId = $("#member_id").val();
+                if (memberId.length > 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/IssueBook/GetMid?id=' + memberId,
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data) {
+                                $("#mname").val(data.name); // Assuming the member has a Name field
+                            } else {
+                                $("#mname").val("Member not found");
+                            }
+                        },
+                        error: function () {
+                            alert("Error retrieving member name");
+                        }
+                    });
+                } else {
+                    $("#mname").val("");
+                }
+            });
+        }
+
+        // Call this function to populate the book list
+        function getBook() {
+            $.ajax({
+                type: 'GET',
+                url: '/IssueBook/GetBook',
+                dataType: 'json',
+                success: function (data) {
+                    $('#book_id').empty(); // Clear previous options
+                    $('#book_id').append('<option>Please Select</option>');
+                    $.each(data, function (i, book) {
+                        $('#book_id').append($('<option>', {
+                            value: book.ID,
+                            text: book.Bname
+                        }));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert("Error retrieving books: " + xhr.responseText);
+                }
+            });
+        }
+
+        // Call both functions when the page loads
+        $(document).ready(function () {
+            getMid();
+            getBook();
+        });
+    </script>
+
+}
+
