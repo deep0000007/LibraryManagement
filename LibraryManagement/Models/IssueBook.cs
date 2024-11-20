@@ -16,11 +16,12 @@ namespace LibraryManagement.Models
     {
         public int id { get; set; }
         public Nullable<int> member_id { get; set; }
-        public Nullable<int> book_id { get; set; }
+        public string book_id { get; set; } // Assuming this is the foreign key
+
         public Nullable<System.DateTime> issuedate { get; set; }
         public Nullable<System.DateTime> returndate { get; set; }
-    
+
+        // Navigation property for Book
         public virtual Book Book { get; set; }
-        public virtual Member Member { get; set; }
     }
 }

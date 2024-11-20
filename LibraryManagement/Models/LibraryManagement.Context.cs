@@ -30,8 +30,8 @@ namespace LibraryManagement.Models
         public virtual DbSet<Publisher> Publishers { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Book> Books { get; set; }
-        public virtual DbSet<IssueBook> IssueBooks { get; set; }
-        public virtual DbSet<Registration> Registrations { get; set; }
         public virtual DbSet<ReturnBook> ReturnBooks { get; set; }
+        public virtual DbSet<Registration> Registrations { get; set; }
+        public virtual DbSet<IssueBook> IssueBooks { get; set; }
     }
 }

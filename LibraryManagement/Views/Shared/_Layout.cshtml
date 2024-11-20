@@ -3,44 +3,164 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Library Management</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-</head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Author", "Index", "Author", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Publisher", "Index", "Publisher", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Member", "Index", "Member", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Book", "Index", "Book", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("IssueBook", "Index", "IssueBook", new { area = "" }, new { @class = "nav-link" })</li>
 
-                </ul>
-                <ul class="navbar-nav">
-                    <li>@Html.ActionLink("Register", "Create", "Register", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Login", "home", "Register", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+    <style>
+        /* Basic Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Body & Container Setup */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .container-fluid {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            padding-top: 20px;
+            width: 240px;
+            position: fixed;
+            height: 100vh;
+        }
+
+            .sidebar a {
+                color: #adb5bd;
+                padding: 15px 20px;
+                text-decoration: none;
+                display: block;
+                font-size: 16px;
+                font-weight: 500;
+                transition: background 0.3s, color 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #495057;
+                    color: #ffffff;
+                }
+
+            .sidebar .active {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #ffffff;
+            border-left: 1px solid #ddd;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+        }
+
+            .navbar h2 {
+                font-size: 24px;
+                color: #333;
+                font-weight: bold;
+            }
+
+            .navbar .nav-link {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+
+        /* Footer Styling */
+        footer {
+            padding: 15px 0;
+            text-align: center;
+            background-color: #f1f1f1;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4 class="text-center">Library Management</h4>
+        <a href="@Url.Action("Index", "Home")" class="active">Home</a>
+        <a href="@Url.Action("Index", "Category")">Category</a>
+        <a href="@Url.Action("Index", "Author")">Author</a>
+        <a href="@Url.Action("Index", "Publisher")">Publisher</a>
+        <a href="@Url.Action("Index", "Member")">Member</a>
+        <a href="@Url.Action("Index", "Book")">Book</a>
+        <a href="@Url.Action("Index", "IssueBook")">Issue Book</a>
+        <a href="@Url.Action("Index", "ReturnBook")">Return Book</a>
+        <br />
+        <br />
+        <br />
+        @if (Session["UserName"] != null)
+        {
+            <span class="font-weight-bold text-dark mr-3">
+                <i class="fas fa-user"></i> Hello, @Session["UserName"]
+            </span>
+            <br />
+            @Html.ActionLink("Logout", "Logout", "Register", new { area = "" },
+                new { @class = "nav-link text-dark font-weight-bold", onclick = "return confirm('Are you sure you want to logout?');" })
+        }
+        else
+        {
+            @Html.ActionLink("Login", "Login", "Register", new { area = "" }, new { @class = "nav-link text-dark font-weight-bold" })
+        }
     </div>
 
+    <!-- Main Content -->
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+            <h2 class="text-center">Welcome to Our Library</h2>
+
+            @*<div class="d-flex align-items-center">
+            @if (Session["UserName"] != null)
+            {
+                <span class="font-weight-bold text-dark mr-3">
+                    <i class="fas fa-user"></i> Hello, @Session["UserName"]
+                </span>
+                <br/>
+                @Html.ActionLink("Logout", "Logout", "Register", new { area = "" },
+                    new { @class = "nav-link text-dark font-weight-bold", onclick = "return confirm('Are you sure you want to logout?');" })
+            }
+            else
+            {
+                @Html.ActionLink("Login", "Login", "Register", new { area = "" }, new { @class = "nav-link text-dark font-weight-bold" })
+            }
+        </div>*@
+        </nav>
+
+        <div>
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Library Management System</p>
+    </footer>
+
+    <!-- Scripts -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

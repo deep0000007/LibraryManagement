@@ -1,69 +1,46 @@
 ﻿@model IEnumerable<LibraryManagement.Models.Book>
 
-@{
-    ViewBag.Title = "Index";
-}
+<div class="text-center mb-4">
+    <h2 class="display-4">Book List</h2>
 
-<h2>Index</h2>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.bname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.contents)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.pages)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.edition)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Author.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.catname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Publisher.name)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.bname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.contents)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.pages)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.edition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Author.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.catname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Publisher.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+<div class="mb-3">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</div>
 
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().bname)</th>
+            <th>@Html.DisplayNameFor(model => model.First().contents)</th>
+            <th>@Html.DisplayNameFor(model => model.First().pages)</th>
+            <th>@Html.DisplayNameFor(model => model.First().edition)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Author.name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Category.catname)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Publisher.name)</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.bname)</td>
+                <td>@Html.DisplayFor(modelItem => item.contents)</td>
+                <td>@Html.DisplayFor(modelItem => item.pages)</td>
+                <td>@Html.DisplayFor(modelItem => item.edition)</td>
+                <td>@Html.DisplayFor(modelItem => item.Author.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Category.catname)</td>
+                <td>@Html.DisplayFor(modelItem => item.Publisher.name)</td>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit", new { id = item.id })" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="@Url.Action("Details", new { id = item.id })" class="btn btn-sm btn-info mx-2">Details</a>
+                    <a href="@Url.Action("Delete", new { id = item.id })" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

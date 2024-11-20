@@ -13,28 +13,61 @@ namespace LibraryManagement.Controllers
         LibraryManagementDBEntities1 db = new LibraryManagementDBEntities1();
         // GET: Register
 
-        public ActionResult home()
+        public ActionResult Register()
         {
             return View();
         }
 
-        public ActionResult Index()
-        {
-            var data = db.Registrations.ToList();
-            return View(data);
-        }
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View();
-        }
+        // POST: User/Register
         [HttpPost]
-        public ActionResult Create(Registration r)
+        public JsonResult Register(Registration model)
         {
-            db.Registrations.Add(r);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                // Check if username already exists
+                if (db.Registrations.Any(u => u.UserName == model.UserName))
+                {
+                    return Json(new { success = false, message = "Username already exists!" });
+                }
 
-            return RedirectToAction("Index");
+                // Save the new registration
+                db.Registrations.Add(model);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Registration successful!" });
+            }
+
+            // Collect model state errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return Json(new { success = false, message = string.Join(", ", errors) });
+        }
+
+        // GET: User/Login
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: User/Login
+        [HttpPost]
+        public JsonResult Login(string userName, string password)
+        {
+            var user = db.Registrations.FirstOrDefault(u => u.UserName == userName && u.password == password);
+
+            if (user != null)
+            {
+                // Store user session
+                Session["UserId"] = user.id;
+                Session["UserName"] = user.UserName;
+                return Json(new { success = true, message = "Login successful!" });
+            }
+            return Json(new { success = false, message = "Invalid username or password!" });
+        }
+
+        // Logout action to clear the session
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Login");
         }
 
     }

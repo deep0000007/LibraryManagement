@@ -13,12 +13,10 @@
         <AssociationConnector Association="LibraryManagementDBModel.FK_Book_Author" />
         <AssociationConnector Association="LibraryManagementDBModel.FK_Book_Category" />
         <AssociationConnector Association="LibraryManagementDBModel.FK_Book_Publisher" />
-        <EntityTypeShape EntityType="LibraryManagementDBModel.IssueBook" Width="1.5" PointX="8.875" PointY="1.75" />
-        <AssociationConnector Association="LibraryManagementDBModel.FK_IssueBook_Book" />
-        <AssociationConnector Association="LibraryManagementDBModel.FK_IssueBook_Member" />
-        <EntityTypeShape EntityType="LibraryManagementDBModel.Registration" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="LibraryManagementDBModel.ReturnBook" Width="1.5" PointX="3.375" PointY="6.75" />
-      </Diagram>
+        <EntityTypeShape EntityType="LibraryManagementDBModel.Registration" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LibraryManagementDBModel.IssueBook" Width="1.5" PointX="6.375" PointY="4.75" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
