@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<LibraryManagement.Models.Author>
 
-@{
-    ViewBag.Title = "Author List";
-}
+<div class="text-center mb-4">
+    <h2 class="display-4">Author List</h2>
 
-<h2 class="text-center text-primary mb-4">Author List</h2>
+</div>
+
+
 
 <!-- Button to Create New Author -->
-<p class="text-right">
-    @Html.ActionLink("Create New Author", "Create", null, new { @class = "btn btn-success btn-lg mb-4" })
+<p class="text-left">
+    @Html.ActionLink("Create New Author", "Add", null, new { @class = "btn btn-primary" })
 </p>
 
 <!-- Table for Displaying Author Data -->

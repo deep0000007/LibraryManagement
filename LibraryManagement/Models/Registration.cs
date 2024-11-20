@@ -15,12 +15,9 @@ namespace LibraryManagement.Models
     public partial class Registration
     {
         public int id { get; set; }
-        public string fname { get; set; }
-        public byte[] lname { get; set; }
-        public string gender { get; set; }
-        public Nullable<System.DateTime> dob { get; set; }
+        public string UserName { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public string confirmPass { get; set; }
+        public string CnPass { get; set; }
     }
 }

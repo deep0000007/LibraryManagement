@@ -1,64 +1,56 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@model LibraryManagement.Models.IssueBook
 
-<h2>Index</h2>
+
+
+
 
 <div class="row">
-    <div class="col-sm-5">
-        @using (Html.BeginForm("save", "IssueBook", FormMethod.Post))
+    <div class="col-sm-6 offset-sm-3">
+        @using (Html.BeginForm("Save", "IssueBook", FormMethod.Post))
         {
-            <div>
-                <h3>Issue book</h3>
+            <div class="card p-4">
+                <h3 class="card-title">Issue Book</h3>
+
+                <div class="form-group">
+                    <label for="member_id">Member Id</label>
+                    <input type="text" id="member_id" name="MemberId" class="form-control" placeholder="Member" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="mname">Name</label>
+                    <input type="text" id="mname" name="MemberName" class="form-control" placeholder="Name" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="book_id">Book Name</label>
+                    <select class="form-control" id="book_id" name="BookId" required>
+                        <option value="">Please Select</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="issuedate">Issue Date</label>
+                    <input type="date" id="issuedate" name="IssueDate" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="returndate">Return Date</label>
+                    <input type="date" id="returndate" name="ReturnDate" class="form-control" required />
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Save" class="btn btn-success btn-lg" />
+                </div>
             </div>
-
-            <div class="form-group">
-                <label> Member Id</label>
-                <input type="text" id="member_id" @*value="member_id"*@ class="form-control" placeholder="Member" reguired />
-            </div>
-            <div class="form-group">
-                <label> Name</label>
-                <input type="text" id="mname" @*value="mname"*@ class="form-control" placeholder="Name" reguired />
-            </div>
-            <div class="form-group">
-                <label> Book Name</label>
-                <select class="form-control" id="book_id" name="book">
-                    <option>Please Select</option>
-                </select>
-
-            </div>
-            <div class="form-group">
-                <label> Issue Date</label>
-                <input type="date" id="issuedate" @*value="issuedate"*@ class="form-control" placeholder="Issue date" reguired />
-            </div>
-            <div class="form-group">
-                <label> Return date</label>
-                <input type="date" id="returndate" @*value="returndate"*@ class="form-control" placeholder="Return date" reguired />
-            </div>
-
-            <div class="form-group">
-
-                <input type="submit" value="save" class="btn btn-success" reguired />
-            </div>
-
-
-
-
         }
     </div>
 </div>
 
-
-@section scripts {
-    <script src="~/Scripts/jquery-3.7.0.js"></script>
+@section Scripts {
     <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-
     <script src="~/Scripts/jquery.validate.min.js"></script>
 
-
     <script>
-        // Call this function to get member name based on the member ID
         function getMid() {
             $("#member_id").keyup(function () {
                 var memberId = $("#member_id").val();
@@ -69,7 +61,7 @@
                         dataType: 'json',
                         success: function (data) {
                             if (data) {
-                                $("#mname").val(data.name); // Assuming the member has a Name field
+                                $("#mname").val(data.name);
                             } else {
                                 $("#mname").val("Member not found");
                             }
@@ -84,15 +76,14 @@
             });
         }
 
-        // Call this function to populate the book list
         function getBook() {
             $.ajax({
                 type: 'GET',
                 url: '/IssueBook/GetBook',
                 dataType: 'json',
                 success: function (data) {
-                    $('#book_id').empty(); // Clear previous options
-                    $('#book_id').append('<option>Please Select</option>');
+                    $('#book_id').empty();
+                    $('#book_id').append('<option value="">Please Select</option>');
                     $.each(data, function (i, book) {
                         $('#book_id').append($('<option>', {
                             value: book.ID,
@@ -106,12 +97,9 @@
             });
         }
 
-        // Call both functions when the page loads
         $(document).ready(function () {
             getMid();
             getBook();
         });
     </script>
-
 }
-

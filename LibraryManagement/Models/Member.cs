@@ -14,18 +14,9 @@ namespace LibraryManagement.Models
     
     public partial class Member
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Member()
-        {
-            this.IssueBooks = new HashSet<IssueBook>();
-        }
-    
         public int id { get; set; }
         public string name { get; set; }
         public string address { get; set; }
         public string phone { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IssueBook> IssueBooks { get; set; }
     }
 }

@@ -1,55 +1,101 @@
-﻿
+﻿@model LibraryManagement.Models.ReturnBook
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Return Book";
 }
 
-<h2>Index</h2>
+<h2>Return Book</h2>
 <div class="row">
     <div class="col-sm-5">
-        @using (Html.BeginForm("save", "ReturnBook", FormMethod.Post))
+        @using (Html.BeginForm("Save", "ReturnBook", FormMethod.Post))
         {
             <div>
                 <h3>Return Book</h3>
             </div>
 
             <div class="form-group">
-                <label> Member Id</label>
-                <input type="text" id="member_id" @*value="member_id"*@ class="form-control" placeholder="Member" reguired />
+                <label>Member ID</label>
+                <input type="text" id="member_id" name="member_id" class="form-control" placeholder="Member ID" required />
             </div>
             <div class="form-group">
-                <label> Name</label>
-                <input type="text" id="mname" @*value="mname"*@ class="form-control" placeholder="Name" reguired />
+                <label>Name</label>
+                <input type="text" id="mname" class="form-control" placeholder="Name" readonly />
             </div>
             <div class="form-group">
-                <label> Book </label>
-                <select class="form-control" id="book" name="book">
-                    <option>Please Select</option>
+                <label>Book</label>
+                <select class="form-control" id="book" name="book" required>
+                    <option value="">Please Select</option>
                 </select>
-
             </div>
             <div class="form-group">
-                <label> Retrurn Book</label>
-                <input type="date" id="returnbook" @*value="issuedate"*@ class="form-control" placeholder="Issue date" reguired />
+                <label>Return Date</label>
+                <input type="date" id="returnbook" name="returndate" class="form-control" readonly />
             </div>
             <div class="form-group">
-                <label> Days Elaps</label>
-                <input type="date" id="elap" @*value="returndate"*@ class="form-control" placeholder="Return date" reguired />
+                <label>Days Elapsed</label>
+                <input type="text" id="elap" name="elap" class="form-control" placeholder="Days Elapsed" readonly />
             </div>
             <div class="form-group">
-                <label> Fine</label>
-                <input type="text" id="fine" @*value="returndate"*@ class="form-control" placeholder="Return date" reguired />
+                <label>Fine</label>
+                <input type="text" id="fine" name="fine" class="form-control" placeholder="Fine" readonly />
             </div>
-
             <div class="form-group">
-
-                <input type="submit" value="save" class="btn btn-success" reguired />
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
-
-
-
-
         }
     </div>
 </div>
 
+@section Scripts {
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
 
+    <script>
+        function getMid() {
+            $("#member_id").keyup(function () {
+                var memberId = $("#member_id").val();
+                if (memberId.length > 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/ReturnBook/GetMid?id=' + memberId,
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.length > 0) {
+                                $("#mname").val(data[0].MemberId);
+                                $("#book").empty();
+                                $("#book").append($("<option>", {
+                                    value: data[0].BookName,
+                                    text: data[0].BookName
+                                }));
+                                $("#returnbook").val(new Date(data[0].ReturnDate).toISOString().split('T')[0]);
+
+                                var elapsedDays = data[0].ElapsedDays || 0;
+                                $('#elap').val(elapsedDays);
+                                $('#fine').val(elapsedDays > 0 ? elapsedDays * 100 : 0);
+                            } else {
+                                $("#mname").val("Member not found");
+                                $("#book").empty().append("<option value=''>Please Select</option>");
+                                $("#returnbook").val('');
+                                $('#elap').val('');
+                                $('#fine').val('');
+                            }
+                        },
+                        error: function () {
+                            alert("Error retrieving member details");
+                        }
+                    });
+                } else {
+                    $("#mname").val("");
+                    $("#book").empty().append("<option value=''>Please Select</option>");
+                    $("#returnbook").val('');
+                    $('#elap').val('');
+                    $('#fine').val('');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            getMid();
+        });
+    </script>
+}

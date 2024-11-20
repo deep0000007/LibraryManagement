@@ -41,7 +41,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="member_id" Type="int" />
-          <Property Name="book_id" Type="int" />
+          <Property Name="book_id" Type="varchar" MaxLength="50" />
           <Property Name="issuedate" Type="date" />
           <Property Name="returndate" Type="date" />
         </EntityType>
@@ -68,13 +68,10 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="fname" Type="varchar" MaxLength="50" />
-          <Property Name="lname" Type="varbinary" MaxLength="50" />
-          <Property Name="gender" Type="varchar" MaxLength="50" />
-          <Property Name="dob" Type="date" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
           <Property Name="email" Type="varchar" MaxLength="50" />
           <Property Name="password" Type="varchar" MaxLength="50" />
-          <Property Name="confirmPass" Type="varchar" MaxLength="50" />
+          <Property Name="CnPass" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ReturnBook">
           <Key>
@@ -123,30 +120,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_IssueBook_Book">
-          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
-          <End Role="IssueBook" Type="Self.IssueBook" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Book">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="IssueBook">
-              <PropertyRef Name="book_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IssueBook_Member">
-          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
-          <End Role="IssueBook" Type="Self.IssueBook" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="IssueBook">
-              <PropertyRef Name="member_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="LibraryManagementDBModelStoreContainer">
           <EntitySet Name="Author" EntityType="Self.Author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
@@ -167,14 +140,6 @@
           <AssociationSet Name="FK_Book_Publisher" Association="Self.FK_Book_Publisher">
             <End Role="Publisher" EntitySet="Publisher" />
             <End Role="Book" EntitySet="Book" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IssueBook_Book" Association="Self.FK_IssueBook_Book">
-            <End Role="Book" EntitySet="Book" />
-            <End Role="IssueBook" EntitySet="IssueBook" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IssueBook_Member" Association="Self.FK_IssueBook_Member">
-            <End Role="Member" EntitySet="Member" />
-            <End Role="IssueBook" EntitySet="IssueBook" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -228,18 +193,10 @@
             <End Role="Publisher" EntitySet="Publishers" />
             <End Role="Book" EntitySet="Books" />
           </AssociationSet>
-          <EntitySet Name="IssueBooks" EntityType="LibraryManagementDBModel.IssueBook" />
-          <AssociationSet Name="FK_IssueBook_Book" Association="LibraryManagementDBModel.FK_IssueBook_Book">
-            <End Role="Book" EntitySet="Books" />
-            <End Role="IssueBook" EntitySet="IssueBooks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IssueBook_Member" Association="LibraryManagementDBModel.FK_IssueBook_Member">
-            <End Role="Member" EntitySet="Members" />
-            <End Role="IssueBook" EntitySet="IssueBooks" />
-          </AssociationSet>
-          <EntitySet Name="Registrations" EntityType="LibraryManagementDBModel.Registration" />
           <EntitySet Name="ReturnBooks" EntityType="LibraryManagementDBModel.ReturnBook" />
-        </EntityContainer>
+          <EntitySet Name="Registrations" EntityType="LibraryManagementDBModel.Registration" />
+          <EntitySet Name="IssueBooks" EntityType="LibraryManagementDBModel.IssueBook" />
+          </EntityContainer>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="id" />
@@ -248,7 +205,6 @@
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="IssueBooks" Relationship="LibraryManagementDBModel.FK_IssueBook_Member" FromRole="Member" ToRole="IssueBook" />
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -265,7 +221,6 @@
           <NavigationProperty Name="Author" Relationship="LibraryManagementDBModel.FK_Book_Author" FromRole="Book" ToRole="Author" />
           <NavigationProperty Name="Category" Relationship="LibraryManagementDBModel.FK_Book_Category" FromRole="Book" ToRole="Category" />
           <NavigationProperty Name="Publisher" Relationship="LibraryManagementDBModel.FK_Book_Publisher" FromRole="Book" ToRole="Publisher" />
-          <NavigationProperty Name="IssueBooks" Relationship="LibraryManagementDBModel.FK_IssueBook_Book" FromRole="Book" ToRole="IssueBook" />
         </EntityType>
         <Association Name="FK_Book_Author">
           <End Type="LibraryManagementDBModel.Author" Role="Author" Multiplicity="0..1" />
@@ -303,55 +258,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="IssueBook">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="member_id" Type="Int32" />
-          <Property Name="book_id" Type="Int32" />
-          <Property Name="issuedate" Type="DateTime" Precision="0" />
-          <Property Name="returndate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Book" Relationship="LibraryManagementDBModel.FK_IssueBook_Book" FromRole="IssueBook" ToRole="Book" />
-          <NavigationProperty Name="Member" Relationship="LibraryManagementDBModel.FK_IssueBook_Member" FromRole="IssueBook" ToRole="Member" />
-        </EntityType>
-        <Association Name="FK_IssueBook_Book">
-          <End Type="LibraryManagementDBModel.Book" Role="Book" Multiplicity="0..1" />
-          <End Type="LibraryManagementDBModel.IssueBook" Role="IssueBook" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Book">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="IssueBook">
-              <PropertyRef Name="book_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IssueBook_Member">
-          <End Type="LibraryManagementDBModel.Member" Role="Member" Multiplicity="0..1" />
-          <End Type="LibraryManagementDBModel.IssueBook" Role="IssueBook" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="IssueBook">
-              <PropertyRef Name="member_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Registration">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="lname" Type="Binary" MaxLength="50" FixedLength="false" />
-          <Property Name="gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="dob" Type="DateTime" Precision="0" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="confirmPass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="ReturnBook">
           <Key>
             <PropertyRef Name="id" />
@@ -363,7 +269,27 @@
           <Property Name="elap" Type="Int32" />
           <Property Name="fine" Type="Int32" />
         </EntityType>
-      </Schema>
+        <EntityType Name="Registration">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CnPass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="IssueBook">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="member_id" Type="Int32" />
+          <Property Name="book_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="issuedate" Type="DateTime" Precision="0" />
+          <Property Name="returndate" Type="DateTime" Precision="0" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -422,12 +348,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IssueBooks">
-            <EntityTypeMapping TypeName="LibraryManagementDBModel.IssueBook">
-              <MappingFragment StoreEntitySet="IssueBook">
+          <EntitySetMapping Name="ReturnBooks">
+            <EntityTypeMapping TypeName="LibraryManagementDBModel.ReturnBook">
+              <MappingFragment StoreEntitySet="ReturnBook">
+                <ScalarProperty Name="fine" ColumnName="fine" />
+                <ScalarProperty Name="elap" ColumnName="elap" />
                 <ScalarProperty Name="returndate" ColumnName="returndate" />
-                <ScalarProperty Name="issuedate" ColumnName="issuedate" />
-                <ScalarProperty Name="book_id" ColumnName="book_id" />
+                <ScalarProperty Name="book" ColumnName="book" />
                 <ScalarProperty Name="member_id" ColumnName="member_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
@@ -436,24 +363,20 @@
           <EntitySetMapping Name="Registrations">
             <EntityTypeMapping TypeName="LibraryManagementDBModel.Registration">
               <MappingFragment StoreEntitySet="Registration">
-                <ScalarProperty Name="confirmPass" ColumnName="confirmPass" />
+                <ScalarProperty Name="CnPass" ColumnName="CnPass" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="dob" ColumnName="dob" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="lname" ColumnName="lname" />
-                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReturnBooks">
-            <EntityTypeMapping TypeName="LibraryManagementDBModel.ReturnBook">
-              <MappingFragment StoreEntitySet="ReturnBook">
-                <ScalarProperty Name="fine" ColumnName="fine" />
-                <ScalarProperty Name="elap" ColumnName="elap" />
+          <EntitySetMapping Name="IssueBooks">
+            <EntityTypeMapping TypeName="LibraryManagementDBModel.IssueBook">
+              <MappingFragment StoreEntitySet="IssueBook">
                 <ScalarProperty Name="returndate" ColumnName="returndate" />
-                <ScalarProperty Name="book" ColumnName="book" />
+                <ScalarProperty Name="issuedate" ColumnName="issuedate" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
                 <ScalarProperty Name="member_id" ColumnName="member_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
